@@ -1,9 +1,8 @@
-# sprint_report.py
+
 import pandas as pd
 from teams import TEAM_MEMBERS, TEAM_SKILLS
 from embeddings import embed_text, cosine_sim, extract_text_from_jira_description
 
-# --- Helper to assign team based on ticket summary + description ---
 def detect_team(summary: str, description: str) -> str:
     issue_text = f"{summary} {description}".strip()
     issue_emb = embed_text(issue_text)
@@ -27,7 +26,7 @@ def generate_scrum_sprint_report(tickets_df, sprint_name=None, start_date=None, 
             .str.upper()
         )
 
-    # --- Assign team using summary + description ---
+    
     df["team"] = df.apply(
         lambda row: detect_team(
             row.get("summary", ""), 
@@ -36,19 +35,17 @@ def generate_scrum_sprint_report(tickets_df, sprint_name=None, start_date=None, 
         axis=1
     )
 
-    # --- Convert created column to datetime ---
+   
     if "created" in df.columns:
         df["created"] = pd.to_datetime(df["created"], errors="coerce")
         if pd.api.types.is_datetime64_any_dtype(df["created"]):
             df["created"] = df["created"].dt.tz_localize(None)
 
-    # --- Debug info ---
     if "created" in df.columns:
         print("📌 Data created range:", df["created"].min(), "→", df["created"].max())
     print("📌 Unique sprints in data:", df["sprint"].dropna().unique())
     print("📌 Unique teams detected:", df["team"].dropna().unique())
 
-    # --- Filtering ---
     if sprint_name:
         df = df[df["sprint"] == sprint_name.upper()]
     if start_date:
@@ -58,7 +55,6 @@ def generate_scrum_sprint_report(tickets_df, sprint_name=None, start_date=None, 
         end_dt = pd.to_datetime(str(end_date)) + pd.Timedelta(days=1) - pd.Timedelta(seconds=1)
         df = df[df["created"] <= end_dt]
 
-    # --- Metrics ---
     ticket_by_status = df["status"].value_counts().to_dict()
     ticket_by_team = df["team"].value_counts().to_dict()
 
