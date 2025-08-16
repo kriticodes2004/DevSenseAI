@@ -8,11 +8,10 @@ import requests
 from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
 
-# Your skill/team data + text utils
 from teams import TEAM_SKILLS, TEAM_MEMBERS
 from embeddings import embed_text, cosine_sim, extract_text_from_jira_description
 
-# ============== Env & Jira setup ==============
+
 load_dotenv()
 JIRA_URL = os.getenv("JIRA_URL", "").rstrip("/")
 PROJECT_KEY = os.getenv("PROJECT_KEY")
@@ -25,7 +24,6 @@ if not all([JIRA_URL, PROJECT_KEY, EMAIL, API_TOKEN]):
 AUTH = HTTPBasicAuth(EMAIL, API_TOKEN)
 HEADERS = {"Accept": "application/json", "Content-Type": "application/json"}
 
-# ============== Helpers ==============
 
 def parse_adf_to_text(adf):
     if not adf:
@@ -71,7 +69,7 @@ def parse_dt(s):
         return datetime.fromisoformat(s)
     except Exception: return None
 
-# ============== Fetch & Normalize ==============
+
 
 def fetch_all_issues(jql, max_results=1000):
     url = f"{JIRA_URL}/rest/api/3/search"
@@ -145,7 +143,6 @@ def load_dataset():
     team_embeds = build_team_embeddings()
     return [normalize_issue(it, team_embeds) for it in raw]
 
-# ============== Aggregations ==============
 
 def count_by(predicate, data): return sum(1 for r in data if predicate(r))
 def group_by(keyfn, data):
@@ -155,7 +152,6 @@ def group_by(keyfn, data):
 def pct(n, d): return 0.0 if d==0 else round((n/d)*100,1)
 def days_ago(n): return datetime.now(timezone.utc) - timedelta(days=n)
 
-# ============== Answer Functions ==============
 def ans_how_many_backlog(data):
     # Backlog heuristics: statusCategory To Do and no sprint
     n = count_by(lambda r: (r["statusCategory"] == "To Do") and (r["sprint"] is None), data)
@@ -434,7 +430,6 @@ def ans_backlog_older_than(data, days):
     more = "" if len(oldies) <= 50 else f"\n(and {len(oldies)-50} more...)"
     return f"Backlog tickets older than {days} days:\n" + "\n".join(lines) + more
 
-# ============== Intent Router ==============
 
 INTENT_PATTERNS = [
     (re.compile(r"how many tickets.* in backlog|backlog.* size|how many.* backlog tickets", re.I), lambda m, d: ans_how_many_backlog(d)),
@@ -541,7 +536,7 @@ def answer_query(q, data):
                 # Pass the match object to the handler function
                 return fn(match, data)
             except Exception as e:
-                return f"⚠️ Error answering that: {e}"
+                return f"⚠ Error answering that: {e}"
     
     # Fallback response if no pattern matches
     return "Sorry, that query is not in the question bank. Type 'help' to see what I can answer."
@@ -553,9 +548,9 @@ def main():
     print(f"✅ Loaded {len(data)} issue(s) from project {PROJECT_KEY}. Type 'help' for examples.\n")
     while True:
         try: q = input("nlq> ").strip()
-        except (EOFError, KeyboardInterrupt): print("\n👋 Bye!"); break
+        except (EOFError, KeyboardInterrupt): print("\n👋 byebye!"); break
         if not q: continue
-        if q.lower() in ("exit", "quit", ":q"): print("👋 Bye!"); break
+        if q.lower() in ("exit", "quit", ":q"): print("👋 Byebye!"); break
         if q.lower() == "help": print(HELP_TEXT); continue
         if q.lower() == "refresh": print("🔄 Refreshing..."); data = load_dataset(); print(f"✅ Reloaded {len(data)} issue(s).\n"); continue
         print(answer_query(q, data), "\n")
