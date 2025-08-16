@@ -3,7 +3,6 @@ from jira import JIRA
 import os
 from dotenv import load_dotenv
 
-# --- Load environment variables ---
 load_dotenv()
 JIRA_URL = os.getenv("JIRA_URL").rstrip("/")
 PROJECT_KEY = os.getenv("PROJECT_KEY")
@@ -11,12 +10,10 @@ EMAIL = os.getenv("EMAIL")
 API_TOKEN = os.getenv("API_TOKEN")
 BOARD_ID = int(os.getenv("BOARD_ID", 1))  # Your Scrum board ID
 
-# --- Connect to Jira ---
 jira_client = JIRA(server=JIRA_URL, basic_auth=(EMAIL, API_TOKEN))
 
 st.set_page_config(page_title="DevSense - Jira Cockpit", layout="wide")
 
-# --- DevSense Main Page ---
 st.title("🚀 DevSense - Jira Intelligence Suite")
 st.markdown("""
 **DevSense** is your AI-powered Jira cockpit. It helps you manage your Jira workflow efficiently and intelligently.  
@@ -33,7 +30,7 @@ Scroll down to see **Active Sprint Tickets** below.
 
 st.divider()
 
-# --- Function to fetch all issues in a sprint using pagination ---
+
 def get_all_sprint_issues(jira_client, project_key, sprint_id):
     all_issues = []
     start_at = 0
@@ -53,8 +50,7 @@ def get_all_sprint_issues(jira_client, project_key, sprint_id):
             break
     return all_issues
 
-# --- Active Sprint Tickets ---
-st.header("📊 Tickets in Active Sprints")
+st.header("Tickets in Active Sprints")
 
 all_sprints = jira_client.sprints(BOARD_ID)
 active_sprints = [s for s in all_sprints if s.state.lower() == "active"]
