@@ -4,9 +4,8 @@ from dotenv import load_dotenv
 from requests.auth import HTTPBasicAuth
 import requests
 from teams import TEAM_SKILLS, TEAM_MEMBERS
-from embeddings import embed_text, cosine_sim, extract_text_from_jira_description  # You must have these ready
+from embeddings import embed_text, cosine_sim, extract_text_from_jira_description 
 
-# Load environment variables
 load_dotenv()
 JIRA_URL = os.getenv("JIRA_URL").rstrip("/")
 PROJECT_KEY = os.getenv("PROJECT_KEY")
@@ -70,7 +69,7 @@ class JiraAutoAssigner:
             print(f"⚠ No members for team {team} — skipping {issue['key']}")
             return None
 
-        # Pick least loaded member
+    
         chosen_member = min(members, key=lambda m: self.member_load.get(m, 0))
         self.assignments[issue["key"]] = chosen_member
         self.member_load[chosen_member] += 1
