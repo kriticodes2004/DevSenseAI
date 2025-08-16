@@ -1,9 +1,24 @@
+# Streamlit web app
 streamlit==1.27.0
-pandas==2.1.1
-requests
-groq
-rich
-markdown-it-py
-pygments
-mdurl
 
+# Data handling
+pandas==2.1.1
+numpy==1.26.4
+
+# HTTP requests
+requests==2.32.0
+
+# Environment variables
+python-dotenv==1.0.1
+
+# Groq LLM client
+groq==0.1.5
+
+# For nicer console output
+rich==14.1.0
+markdown-it-py==4.0.0
+mdurl==0.1.2
+pygments==2.19.2
+
+# Optional: team management module if you have it
+# teams==<version if pip-installable>
