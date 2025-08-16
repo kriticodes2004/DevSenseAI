@@ -1,10 +1,9 @@
 streamlit==1.27.0
-pandas==2.0.3
-numpy==1.26.5
-matplotlib==3.8.0
-groq==0.3.3
-requests==2.32.0
-python-dotenv==1.1.1
-sentence-transformers==2.2.2
-jira==3.4.1
+pandas==2.1.1
+requests
+groq
+rich
+markdown-it-py
+pygments
+mdurl
 
