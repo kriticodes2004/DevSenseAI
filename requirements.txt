@@ -1,11 +1,16 @@
+# Core
 streamlit==1.27.0
+
+# Data handling
 pandas==2.0.3
 numpy==1.26.5
 matplotlib==3.8.1
+
+# Jira integration
 jira==3.4.1
 python-dotenv==1.1.1
+
+# LLM / embeddings
 torch==2.2.0+cpu
 sentence-transformers==2.2.2
-# Groq API directly from PyPI URL to ensure proper install
-groq @ https://files.pythonhosted.org/packages/xx/yy/groq-0.3.3-py3-none-any.whl
-
+groq==0.3.3
