@@ -19,7 +19,7 @@ EMAIL = os.getenv("EMAIL")
 API_TOKEN = os.getenv("API_TOKEN")
 
 if not all([JIRA_URL, PROJECT_KEY, EMAIL, API_TOKEN]):
-    raise SystemExit("❌ Missing env vars. Ensure JIRA_URL, PROJECT_KEY, EMAIL, API_TOKEN are in your .env")
+    raise SystemExit(" Missing env vars. Ensure JIRA_URL, PROJECT_KEY, EMAIL, API_TOKEN are in your .env")
 
 AUTH = HTTPBasicAuth(EMAIL, API_TOKEN)
 HEADERS = {"Accept": "application/json", "Content-Type": "application/json"}
