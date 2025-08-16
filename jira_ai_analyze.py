@@ -16,7 +16,7 @@ GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 
 
 def parse_adf(adf):
-    """Parse Jira ADF description into plain text."""
+    
     if isinstance(adf, str):
         return adf
     if not adf or "content" not in adf:
@@ -33,7 +33,7 @@ def parse_adf(adf):
 
 
 def get_sprint(fields):
-    """Extract sprint name like S1, S2 or return None."""
+    
     sprint_field = fields.get("customfield_10020")
     if sprint_field and isinstance(sprint_field, list) and sprint_field:
         sprint_info = sprint_field[0]
@@ -49,7 +49,7 @@ def get_sprint(fields):
 
 
 def get_team(assignee_name_or_email: str) -> str:
-    """Find team from TEAM_MEMBERS mapping."""
+   
     if not assignee_name_or_email:
         return "Unassigned"
     for team, members in TEAM_MEMBERS.items():
@@ -58,7 +58,7 @@ def get_team(assignee_name_or_email: str) -> str:
     return "Other"
 
 def fetch_all_tickets():
-    """Fetch ALL Jira tickets using pagination."""
+    
     search_url = f"{JIRA_URL}/rest/api/3/search"
     jql = f"project={PROJECT_KEY} ORDER BY created DESC"
     auth = HTTPBasicAuth(EMAIL, API_TOKEN)
@@ -111,7 +111,7 @@ def fetch_all_tickets():
 
 
 def analyze_ticket(summary, description):
-    """Send ticket data to Groq AI for insights."""
+   
     client = Groq(api_key=GROQ_API_KEY)
     prompt = f"""
 You are an AI assistant for a scrum master.
@@ -135,7 +135,7 @@ Ticket Description: {description}
 
 if __name__ == "__main__":
     tickets = fetch_all_tickets()
-    print(f"\n✅ Found {len(tickets)} issues from project {PROJECT_KEY}\n")
+    print(f"\n Found {len(tickets)} issues from project {PROJECT_KEY}\n")
 
     for t in tickets:
         print(f"--- {t['key']} ---")
