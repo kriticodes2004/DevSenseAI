@@ -5,18 +5,16 @@ from dotenv import load_dotenv
 from teams import TEAM_MEMBERS, TEAM_SKILLS
 from embeddings import embed_text, cosine_sim, extract_text_from_jira_description
 
-# Load environment variables
 load_dotenv()
 JIRA_URL = os.getenv("JIRA_URL")
 EMAIL = os.getenv("EMAIL")
 API_TOKEN = os.getenv("API_TOKEN")
 PROJECT_KEY = os.getenv("PROJECT_KEY")
 
-# Jira connection
 jira = JIRA(server=JIRA_URL, basic_auth=(EMAIL, API_TOKEN))
 
 def get_team_for_issue(issue):
-    """Determine best-fit team based on issue content."""
+   
     summary = issue.fields.summary or ""
     description = ""
 
@@ -45,20 +43,19 @@ def get_team_for_issue(issue):
 
 
 def rebalance_sprint(sprint_id):
-    """Evenly redistribute ALL sprint issues across team members within their team."""
-    # 1. Get all issues in sprint
+   
+
     jql = f'project = "{PROJECT_KEY}" AND sprint = {sprint_id}'
     issues = jira.search_issues(jql, maxResults=False)
 
     print(f"Found {len(issues)} issues in sprint {sprint_id}")
 
-    # 2. Group by team
+   
     team_issues = defaultdict(list)
     for issue in issues:
         team = get_team_for_issue(issue)
         team_issues[team].append(issue)
 
-    # 3. For each team, evenly assign issues
     for team, team_issues_list in team_issues.items():
         members = TEAM_MEMBERS.get(team, TEAM_MEMBERS["General"])
         if not members:
@@ -74,7 +71,7 @@ def rebalance_sprint(sprint_id):
         for key, member in assignments.items():
             print(f"  - {key} → {member}")
 
-    print("\nSprint rebalancing complete ✅")
+    print("\nSprint rebalancing complete ")
 
 
 if __name__ == "__main__":
