@@ -74,7 +74,7 @@ class JiraAutoAssigner:
         chosen_member = min(members, key=lambda m: self.member_load.get(m, 0))
         self.assignments[issue["key"]] = chosen_member
         self.member_load[chosen_member] += 1
-        print(f"✅ {issue['key']}: Assigned to '{chosen_member}' (Team: {team})")
+        print(f" {issue['key']}: Assigned to '{chosen_member}' (Team: {team})")
 
     def get_account_id(self, email):
         url = f"{JIRA_URL}/rest/api/3/user/search"
@@ -93,14 +93,14 @@ class JiraAutoAssigner:
         if r.status_code == 204:
             print(f"   ↳ Jira updated for {issue_key}")
         else:
-            print(f"❌ Failed to update {issue_key}: {r.text}")
+            print(f" Failed to update {issue_key}: {r.text}")
 
     def run(self):
-        print("🔍 Fetching unassigned issues...")
+        print("Fetching unassigned issues...")
         jql = f'project = "{PROJECT_KEY}" AND assignee IS EMPTY AND statusCategory != Done'
         unassigned = self.get_issues(jql)
         if not unassigned:
-            print("🎉 No unassigned issues found.")
+            print(" No unassigned issues found.")
             return
 
         self.count_current_load()
@@ -109,11 +109,11 @@ class JiraAutoAssigner:
         for issue in unassigned:
             self.assign_issue(issue)
 
-        print("\n📤 Updating Jira with assignments...")
+        print("\n Updating Jira with assignments...")
         for key, email in self.assignments.items():
             self.update_jira_assignment(key, email)
 
-        print("\n✅ Assignment complete.")
+        print("\n Assignment complete.")
 
 if __name__ == "__main__":
     JiraAutoAssigner().run()
