@@ -14,6 +14,9 @@ python-dotenv==1.0.1
 # Groq LLM client (Python 3.11 compatible)
 groq==0.14.0
 
+# Jira API client
+jira==3.3.0
+
 # For nicer console output (compatible with Streamlit 1.27.0)
 rich<14,>=10.14.0
 markdown-it-py==4.0.0
