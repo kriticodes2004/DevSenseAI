@@ -12,7 +12,8 @@ DevSense empowers Scrum Masters and agile teams to:
 - **Rebalance sprints mid-way** to distribute work evenly.  
 - **Monitor live sprint progress**, ticket status, and backlog.  
 - **Generate AI-powered ticket analysis** and scrum reports.  
-- **Query Jira naturally** using plain English, e.g., `"How many tickets are in sprint s1?"`.  
+- **Query Jira naturally** using plain English, e.g., `"How many tickets are in sprint s1?"`
+- - **create tickets manually** in the dashboard itself and push to a new or existing sprint.  
 
 It acts as a **central hub for sprint management**, combining task assignment, analytics, and reporting in one intelligent dashboard.
 
